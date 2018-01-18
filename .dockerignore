@@ -1,0 +1,4 @@
+*
+!main.go
+!vendor/*
+!docker-health-check
