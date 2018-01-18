@@ -12,7 +12,8 @@ A tiny health check tool for docker
 
 ```
 FROM scratch
-ADD https://github.com/chrisaxiom/docker-health-check /docker-health-check
+ADD https://github.com/chrisaxiom/docker-health-check/blob/master/docker-health-check?raw=true /docker-health-check
+HEALTHCHECK --interval=8s --timeout=120s --retries=8 CMD ["/docker-health-check",  "--fail", "-s", "http://127.0.0.1:8000/api/ping"]
 ...
 ```
 
