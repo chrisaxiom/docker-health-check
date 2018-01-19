@@ -12,7 +12,7 @@ import (
 func main() {
 
 	app := cli.NewApp()
-	app.Version = "0.0.1"
+	app.Version = "0.0.3"
 	app.Name = "Health Checker"
 	app.Usage = "Hits an endpoint for you.  healthcheck -url=http://localhost/ping"
 	app.Flags = []cli.Flag{
@@ -47,20 +47,20 @@ func main() {
 
 func actionFunc(c *cli.Context) error {
 	if len(url) < 0 {
-		return cli.NewExitError("url length must be > 0 ", 85)
+		return cli.NewExitError("url length must be > 0 ", 1)
 	}
 
 	req, err := http.NewRequest(httpVerb, url, nil)
 
 	if err != nil {
-		return cli.NewExitError(err.Error(), 84)
+		return cli.NewExitError(err.Error(), 1)
 	}
 	for _, str := range c.StringSlice("headers") {
 		kv := strings.Split(str, ":")
 		if len(kv) == 2 {
 			req.Header.Add(kv[0], kv[1])
 		} else {
-			return cli.NewExitError("header field must be in the format \"key:value\"", 80)
+			return cli.NewExitError("header field must be in the format \"key:value\"", 1)
 		}
 	}
 
@@ -69,7 +69,7 @@ func actionFunc(c *cli.Context) error {
 	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return cli.NewExitError(err.Error(), 83)
+		return cli.NewExitError(err.Error(), 1)
 	}
 	if resp != nil {
 		defer func(r *http.Response) {
@@ -78,7 +78,7 @@ func actionFunc(c *cli.Context) error {
 			}
 		}(resp)
 		if resp.StatusCode != statusCode {
-			return cli.NewExitError(fmt.Sprintf("resp code %d didn't match %d", resp.StatusCode, statusCode), 82)
+			return cli.NewExitError(fmt.Sprintf("resp code %d didn't match %d", resp.StatusCode, statusCode), 1)
 		}
 	}
 	return nil
