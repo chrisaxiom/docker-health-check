@@ -13,13 +13,14 @@ import (
 func main() {
 
 	app := cli.NewApp()
-	app.Version = "0.0.3"
+	app.Version = "0.0.4"
 	app.Name = "Health Checker"
 	app.Usage = "Hits an endpoint for you.  healthcheck -url=http://localhost/ping"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:        "url, U",
 			Usage:       "the url to hit (required)",
+			EnvVar:      "HEALTHCHECK_URL",
 			Destination: &url,
 		},
 		cli.StringSliceFlag{
@@ -30,12 +31,14 @@ func main() {
 			Name:        "verb, V",
 			Usage:       "the HTTP verb to use",
 			Value:       "GET",
+			EnvVar:      "HEALTHCHECK_VERB",
 			Destination: &httpVerb,
 		},
 		cli.IntFlag{
 			Name:        "code, C",
 			Usage:       "expected response code",
 			Value:       http.StatusOK,
+			EnvVar:      "HEALTHCHECK_RESPONSECODE",
 			Destination: &statusCode,
 		},
 		cli.IntFlag{
