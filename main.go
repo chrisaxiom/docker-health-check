@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/urfave/cli"
 )
@@ -37,6 +38,13 @@ func main() {
 			Value:       http.StatusOK,
 			Destination: &statusCode,
 		},
+		cli.IntFlag{
+			Name:        "timeout, T",
+			Usage:       "timeout for HTTP connection",
+			Value:       10,
+			EnvVar:      "HEALTHCHECK_TIMEOUT",
+			Destination: &timeOut,
+		},
 		// http body not supported yet
 		// response body checking not supported yet
 	}
@@ -51,7 +59,6 @@ func actionFunc(c *cli.Context) error {
 	}
 
 	req, err := http.NewRequest(httpVerb, url, nil)
-
 	if err != nil {
 		return cli.NewExitError(err.Error(), 1)
 	}
@@ -63,10 +70,10 @@ func actionFunc(c *cli.Context) error {
 			return cli.NewExitError("header field must be in the format \"key:value\"", 1)
 		}
 	}
-
 	req.Close = true
 
-	client := http.Client{}
+	timeout := time.Duration(timeOut) * time.Second
+	client := &http.Client{Timeout: timeout}
 	resp, err := client.Do(req)
 	if err != nil {
 		return cli.NewExitError(err.Error(), 1)
@@ -89,4 +96,5 @@ var (
 	url        string
 	httpVerb   string
 	statusCode int
+	timeOut    int
 )
