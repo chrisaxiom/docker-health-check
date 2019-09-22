@@ -44,7 +44,7 @@ func main() {
 		cli.IntFlag{
 			Name:        "timeout, T",
 			Usage:       "timeout for HTTP connection",
-			Value:       10,
+			Value:       0,
 			EnvVar:      "HEALTHCHECK_TIMEOUT",
 			Destination: &timeOut,
 		},
@@ -75,8 +75,13 @@ func actionFunc(c *cli.Context) error {
 	}
 	req.Close = true
 
-	timeout := time.Duration(timeOut) * time.Second
-	client := &http.Client{Timeout: timeout}
+	var client *http.Client
+	if timeOut > 0 {
+		timeout := time.Duration(timeOut) * time.Second
+		client = &http.Client{Timeout: timeout}
+	} else {
+		client = &http.Client{}
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return cli.NewExitError(err.Error(), 1)

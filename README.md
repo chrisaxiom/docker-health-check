@@ -44,6 +44,13 @@ HEALTHCHECK --interval=8s --timeout=120s --retries=8 CMD ["/docker-health-check"
 ...
 ```
 
+Repository:
+
+```
+ADD https://repos.radical.systems/repository/binary-release/docker-health-check/linux-x64/docker-health-check /
+HEALTHCHECK --interval=15s --timeout=120s --retries=8 CMD ["/docker-health-check", "-url=http://127.0.0.1:8000/api/ping"]
+```
+
 **Not Supported (Yet)**
 
 - Response body checking
