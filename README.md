@@ -23,7 +23,7 @@ Direct:
 ```
 FROM ubuntu:latest as hc
 ADD https://github.com/chrisaxiom/docker-health-check/blob/master/docker-health-check?raw=true /docker-health-check
-chmod a+x /docker-health-check
+RUN chmod a+x /docker-health-check
 # your container
 FROM scratch
 COPY --from=hc /docker-health-check /docker-health-check
