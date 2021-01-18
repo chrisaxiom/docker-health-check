@@ -19,7 +19,9 @@ jobs:
         go-version: 1.15
 
     - name: Build
-      run: go build -o healthcheck -v ./... 
+      env: 
+        CGO_ENABLED: 0   
+      run: go build -o healthcheck -ldflags="-s -w" -v ./...
     
     - name: UPX GitHub Action
       uses: crazy-max/ghaction-upx@v1
