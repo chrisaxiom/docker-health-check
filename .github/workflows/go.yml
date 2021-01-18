@@ -20,6 +20,13 @@ jobs:
 
     - name: Build
       run: go build -o healthcheck -v ./... 
+    
+    - name: UPX GitHub Action
+      uses: crazy-max/ghaction-upx@v1
+      with:
+        # File to compress
+        file: healthcheck
+        args: --best
 
     - name: Test
       run: go test -v ./...
